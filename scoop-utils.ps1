@@ -1,5 +1,5 @@
 # utils for scoop
-# version 0.0.1
+# version 0.0.2
 
 # helpinfo
 $commandHelpInfo = @"
@@ -21,7 +21,11 @@ Options:
     -o, --output <path>    output file path
 "@
 
-# TODO: 检查是否有scoop
+# 检查环境变量中是否有scoop
+if (-not (Get-Command -Name "scoop" -ErrorAction SilentlyContinue)) {
+    Write-Error "scoop is installed"
+    exit
+}
 
 function Backup-ScoopList {
     param (
