@@ -1,0 +1,296 @@
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>ScoopApps</T>
+      <T>System.Management.Automation.PSCustomObject</T>
+      <T>System.Object</T>
+    </TN>
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">7zip</S>
+      <DT N="Updated">2024-05-19T16:13:41.7529809+08:00</DT>
+      <S N="Version">24.05</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="1">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">bat</S>
+      <DT N="Updated">2024-05-27T11:04:57.8281185+08:00</DT>
+      <S N="Version">0.24.0</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="2">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">cacert</S>
+      <DT N="Updated">2024-05-24T16:02:31.6494718+08:00</DT>
+      <S N="Version">2024-03-11</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="3">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">dark</S>
+      <DT N="Updated">2024-05-19T16:42:31.7214704+08:00</DT>
+      <S N="Version">3.14</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="4">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">dust</S>
+      <DT N="Updated">2024-05-19T17:07:49.0161475+08:00</DT>
+      <S N="Version">1.0.0</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="5">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">eza</S>
+      <DT N="Updated">2024-05-20T11:07:45.5838532+08:00</DT>
+      <S N="Version">0.18.16</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="6">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">fd</S>
+      <DT N="Updated">2024-05-21T19:53:43.7061163+08:00</DT>
+      <S N="Version">10.1.0</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="7">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">fzf</S>
+      <DT N="Updated">2024-05-22T10:19:01.4368107+08:00</DT>
+      <S N="Version">0.52.1</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="8">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">gcc</S>
+      <DT N="Updated">2024-05-21T16:46:05.8082202+08:00</DT>
+      <S N="Version">13.2.0</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="9">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">git</S>
+      <DT N="Updated">2024-05-19T16:14:24.6473312+08:00</DT>
+      <S N="Version">2.45.1</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="10">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">less</S>
+      <DT N="Updated">2024-05-22T10:44:46.9506499+08:00</DT>
+      <S N="Version">643</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="11">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">logseq</S>
+      <DT N="Updated">2024-05-20T10:34:48.6157723+08:00</DT>
+      <S N="Version">0.10.9</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="12">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">make</S>
+      <DT N="Updated">2024-05-22T11:08:16.6707182+08:00</DT>
+      <S N="Version">4.4.1</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="13">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">mobaxterm</S>
+      <DT N="Updated">2024-05-19T16:33:02.205693+08:00</DT>
+      <S N="Version">24.1</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="14">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">neovim</S>
+      <DT N="Updated">2024-05-19T16:56:58.7153156+08:00</DT>
+      <S N="Version">0.10.0</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="15">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">posh-git</S>
+      <DT N="Updated">2024-05-22T10:19:43.6830509+08:00</DT>
+      <S N="Version">1.1.0</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="16">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">potplayer</S>
+      <DT N="Updated">2024-05-19T16:24:42.8883571+08:00</DT>
+      <S N="Version">240509</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="17">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">powertoys</S>
+      <DT N="Updated">2024-05-25T20:05:14.2520267+08:00</DT>
+      <S N="Version">0.81.0</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="18">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">psfzf</S>
+      <DT N="Updated">2024-05-22T10:19:05.5469993+08:00</DT>
+      <S N="Version">2.6.1</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="19">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">putty</S>
+      <DT N="Updated">2024-05-19T16:29:43.5424936+08:00</DT>
+      <S N="Version">0.81</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="20">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">python</S>
+      <DT N="Updated">2024-05-19T16:44:43.5250254+08:00</DT>
+      <S N="Version">3.12.3</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="21">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">ripgrep</S>
+      <DT N="Updated">2024-05-21T16:51:07.377289+08:00</DT>
+      <S N="Version">14.1.0</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="22">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">trafficmonitor</S>
+      <DT N="Updated">2024-05-19T16:34:43.0327072+08:00</DT>
+      <S N="Version">1.84.1</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="23">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">v2rayn</S>
+      <DT N="Updated">2024-05-20T18:53:00.9054418+08:00</DT>
+      <S N="Version">6.43</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="24">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">vncviewer</S>
+      <DT N="Updated">2024-05-19T16:30:43.7705725+08:00</DT>
+      <S N="Version">7.11.1</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="25">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">vscode</S>
+      <DT N="Updated">2024-05-19T16:20:24.2223962+08:00</DT>
+      <S N="Version">1.89.1</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="26">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">wget</S>
+      <DT N="Updated">2024-05-24T16:02:43.6158841+08:00</DT>
+      <S N="Version">1.21.4</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="27">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">extras</S>
+      <S N="Name">winrar</S>
+      <DT N="Updated">2024-05-19T16:50:14.9065671+08:00</DT>
+      <S N="Version">7.01</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+  <Obj RefId="28">
+    <TNRef RefId="0" />
+    <MS>
+      <S N="Source">main</S>
+      <S N="Name">xray</S>
+      <DT N="Updated">2024-05-20T18:52:53.2110192+08:00</DT>
+      <S N="Version">1.8.11</S>
+      <S N="Info"></S>
+    </MS>
+  </Obj>
+</Objs>
