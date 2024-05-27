@@ -21,6 +21,8 @@ Options:
     -o, --output <path>    output file path
 "@
 
+# TODO: 检查是否有scoop
+
 function Backup-ScoopList {
     param (
         [Parameter(Mandatory=$false)]
