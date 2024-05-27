@@ -23,7 +23,7 @@ Options:
 
 # 检查环境变量中是否有scoop
 if (-not (Get-Command -Name "scoop" -ErrorAction SilentlyContinue)) {
-    Write-Error "scoop is installed"
+    Write-Error "scoop is not installed"
     exit
 }
 
