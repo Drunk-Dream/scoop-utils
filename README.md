@@ -1,4 +1,6 @@
-# scoop-utils
+# <center><b>scoop-utils</b></center>
+
+---
 
 这是一个为scoop提供额外功能的工具，好吧其实我也不知道scoop本身有没有这个功能，就是写着玩的
 
