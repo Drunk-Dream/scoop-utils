@@ -1,5 +1,5 @@
 # utils for scoop
-# version 0.0.3
+# version 0.0.4
 
 ######################### help info ############################
 $commandHelpInfo = @"
@@ -45,11 +45,7 @@ function ScoopCheck {
 
 function ExtractParam {
     param (
-        # AllParameter
-        [Parameter(Mandatory = $true)]
         [System.Object[]]$AllParameter,
-        # specifiedParameter
-        [Parameter(Mandatory = $true)]
         [string]$specifiedParameter
     )
     if ($AllParameter -contains $specifiedParameter) {
@@ -101,7 +97,6 @@ function Update-All {
             }
             $UpdateCommand = "scoop update $name"
             Invoke-Expression $UpdateCommand
-            # Write-Host $UpdateCommand
         }
     }
     catch {
@@ -118,46 +113,33 @@ function ScoopHelp {
     )
     if ($params[0] -eq "-h" -or $params[0] -eq "--help") {
         Write-Host $commandHelpInfo
-        exit
     }
-
-    if ($params[0] -eq "help") {
+    elseif ($params[0] -eq "help") {
         if ($params[1]) {
             Write-Host $helpInfo[$params[1]]
         }
         else {
             Write-Host $commandHelpInfo
         }
-        exit
     }
+    exit
 }
 
 ######################### backup ############################
-#TODO: 重构参数识别的代码
 function ScoopBackup {
     param (
         [Parameter(Mandatory = $true)]
         [System.Object[]]$params
     )
-    if ($params[0] -eq "backup") {
-        if ($params[1] -eq "-o" -or $params[1] -eq "--output") {
-            if ($params[2]) {
-                $BackupFilePath = $params[2]
-            }
-            else {
-                Write-Error "Backup-ScoopList: output file path not specified"
-                exit
-            }
-        }
-        elseif ($params[1]) {
-            $BackupFilePath = $params[1]
-        }
-        else {
-            $BackupFilePath = "scoop-list.xml"
-        }
-        Backup-ScoopList -FilePath $BackupFilePath
-        exit
+    $backupFilePath = ExtractParam $params "-o"
+    if (-not $backupFilePath) {
+        $backupFilePath = ExtractParam $params "--output"
     }
+    if (-not $backupFilePath) {
+        $backupFilePath = $PWD.Path + "\scoop-list.xml"
+    }
+    Backup-ScoopList -FilePath $BackupFilePath
+    exit
 }
 
 ######################### update ############################
@@ -166,7 +148,7 @@ function ScoopUpdate {
         [Parameter(Mandatory = $true)]
         [System.Object[]]$params
     )
-    $excludeApps = ExtractParam -AllParameter $params -specifiedParameter "--exclude"
+    $excludeApps = ExtractParam $params "--exclude"
     Update-All -exclude $excludeApps
     exit
 }
