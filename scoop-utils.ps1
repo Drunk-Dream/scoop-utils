@@ -65,7 +65,11 @@ function Update-All {
         $AvailableUpdates = Invoke-Expression "scoop status -l"
         foreach ($updateApp in $AvailableUpdates) {
             $name = $updateApp.Name
-            if ($exclude -and $name -in $exclude) {
+            $info = $updateApp.Info
+            if (
+                ($info -eq "Held package") -or
+                ($exclude -and $name -in $exclude)
+            ) {
                 continue
             }
             $UpdateCommand = "scoop update $name"
@@ -95,6 +99,7 @@ if ($args[0] -eq "help") {
 }
 
 ######################### backup ############################
+#TODO: 重构参数识别的代码
 if ($args[0] -eq "backup") {
     if ($args[1] -eq "-o" -or $args[1] -eq "--output") {
         if ($args[2]) {
