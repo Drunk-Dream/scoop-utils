@@ -240,6 +240,7 @@ function ScoopUpdate {
     exit
 }
 
+######################### main ############################
 function ScoopMain {
     param (
         [Parameter(Mandatory = $true)]
