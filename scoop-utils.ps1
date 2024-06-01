@@ -122,12 +122,14 @@ if ($args[0] -eq "update") {
     if ($args -contains "--exclude") {
         $index = $args.IndexOf("--exclude") + 1
         if ($index -lt $args.Length -and $args[$index] -notmatch "^-") {
-            Update-All -exclude $args[$index]
+            $excludeApps = $args[$index]
         } else {
             Write-Error "Update-All: exclude apps not specified"
+            exit
         }
     } else {
-        Update-All
+        $excludeApps = $null
     }
+    Update-All -exclude $excludeApps
     exit
 }
