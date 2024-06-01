@@ -43,6 +43,30 @@ function ScoopCheck {
     }
 }
 
+function ExtractParam {
+    param (
+        # AllParameter
+        [Parameter(Mandatory = $true)]
+        [System.Object[]]$AllParameter,
+        # specifiedParameter
+        [Parameter(Mandatory = $true)]
+        [string]$specifiedParameter
+    )
+    if ($AllParameter -contains $specifiedParameter) {
+        $index = $AllParameter.IndexOf($specifiedParameter) + 1
+        if ($index -lt $AllParameter.Length -and $AllParameter[$index] -notmatch "^-") {
+            return $AllParameter[$index]
+        }
+        else {
+            Write-Error "$specifiedParameter is not specified"
+            exit
+        }
+    }
+    else {
+        return $null
+    }
+}
+
 function Backup-ScoopList {
     param (
         [Parameter(Mandatory = $true)]
@@ -90,7 +114,7 @@ function Update-All {
 function ScoopHelp {
     param (
         [Parameter(Mandatory = $true)]
-        [System.Object]$params
+        [System.Object[]]$params
     )
     if ($params[0] -eq "-h" -or $params[0] -eq "--help") {
         Write-Host $commandHelpInfo
@@ -113,7 +137,7 @@ function ScoopHelp {
 function ScoopBackup {
     param (
         [Parameter(Mandatory = $true)]
-        [System.Object]$params
+        [System.Object[]]$params
     )
     if ($params[0] -eq "backup") {
         if ($params[1] -eq "-o" -or $params[1] -eq "--output") {
@@ -140,21 +164,9 @@ function ScoopBackup {
 function ScoopUpdate {
     param (
         [Parameter(Mandatory = $true)]
-        [System.Object]$params
+        [System.Object[]]$params
     )
-    if ($params -contains "--exclude") {
-        $index = $params.IndexOf("--exclude") + 1
-        if ($index -lt $params.Length -and $params[$index] -notmatch "^-") {
-            $excludeApps = $params[$index]
-        }
-        else {
-            Write-Error "Update-All: exclude apps not specified"
-            exit
-        }
-    }
-    else {
-        $excludeApps = $null
-    }
+    $excludeApps = ExtractParam -AllParameter $params -specifiedParameter "--exclude"
     Update-All -exclude $excludeApps
     exit
 }
@@ -162,7 +174,7 @@ function ScoopUpdate {
 function ScoopMain {
     param (
         [Parameter(Mandatory = $true)]
-        [System.Object]$params
+        [System.Object[]]$params
     )
     ScoopCheck
     if ($params[0] -eq "-h" -or $params[0] -eq "--help" -or $params[0] -eq "help") {
