@@ -30,26 +30,29 @@ Options:
 "@
 
 $helpInfo = @{
-    "main" = $commandHelpInfo
+    "main"   = $commandHelpInfo
     "backup" = $backupHelpInfo
     "update" = $updateHelpInfo
 }
 
 # 检查环境变量中是否有scoop
-if (-not (Get-Command -Name "scoop" -ErrorAction SilentlyContinue)) {
-    Write-Error "scoop is not installed"
-    exit
+function ScoopCheck {
+    if (-not (Get-Command -Name "scoop" -ErrorAction SilentlyContinue)) {
+        Write-Error "scoop is not installed"
+        exit
+    }
 }
 
 function Backup-ScoopList {
     param (
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $true)]
         [string]$FilePath
     )
     try {
         $BackupCommand = "scoop list | Export-Clixml -Path $FilePath"
         Invoke-Expression $BackupCommand
-    } catch {
+    }
+    catch {
         Write-Error "Backup-ScoopList: $($_.Message)"
         return
     }
@@ -58,7 +61,7 @@ function Backup-ScoopList {
 function Update-All {
     param (
         # $exclude
-        [Parameter(Mandatory=$false)]
+        [Parameter(Mandatory = $true)]
         [System.String[]]$exclude
     )
     try {
@@ -84,52 +87,95 @@ function Update-All {
 }
 
 ######################### help info ############################
-if ($args[0] -eq "-h" -or $args[0] -eq "--help") {
-    Write-Host $commandHelpInfo
-    exit
-}
-
-if ($args[0] -eq "help") {
-    if ($args[1]) {
-        Write-Host $helpInfo[$args[1]]
-    } else {
+function ScoopHelp {
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.Object]$params
+    )
+    if ($params[0] -eq "-h" -or $params[0] -eq "--help") {
         Write-Host $commandHelpInfo
+        exit
     }
-    exit
+
+    if ($params[0] -eq "help") {
+        if ($params[1]) {
+            Write-Host $helpInfo[$params[1]]
+        }
+        else {
+            Write-Host $commandHelpInfo
+        }
+        exit
+    }
 }
 
 ######################### backup ############################
 #TODO: 重构参数识别的代码
-if ($args[0] -eq "backup") {
-    if ($args[1] -eq "-o" -or $args[1] -eq "--output") {
-        if ($args[2]) {
-            $BackupFilePath = $args[2]
-        } else {
-            Write-Error "Backup-ScoopList: output file path not specified"
-            exit
+function ScoopBackup {
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.Object]$params
+    )
+    if ($params[0] -eq "backup") {
+        if ($params[1] -eq "-o" -or $params[1] -eq "--output") {
+            if ($params[2]) {
+                $BackupFilePath = $params[2]
+            }
+            else {
+                Write-Error "Backup-ScoopList: output file path not specified"
+                exit
+            }
         }
-    } elseif ($args[1]) {
-        $BackupFilePath = $args[1]
-    } else {
-        $BackupFilePath = "scoop-list.xml"
+        elseif ($params[1]) {
+            $BackupFilePath = $params[1]
+        }
+        else {
+            $BackupFilePath = "scoop-list.xml"
+        }
+        Backup-ScoopList -FilePath $BackupFilePath
+        exit
     }
-    Backup-ScoopList -FilePath $BackupFilePath
-    exit
 }
 
 ######################### update ############################
-if ($args[0] -eq "update") {
-    if ($args -contains "--exclude") {
-        $index = $args.IndexOf("--exclude") + 1
-        if ($index -lt $args.Length -and $args[$index] -notmatch "^-") {
-            $excludeApps = $args[$index]
-        } else {
+function ScoopUpdate {
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.Object]$params
+    )
+    if ($params -contains "--exclude") {
+        $index = $params.IndexOf("--exclude") + 1
+        if ($index -lt $params.Length -and $params[$index] -notmatch "^-") {
+            $excludeApps = $params[$index]
+        }
+        else {
             Write-Error "Update-All: exclude apps not specified"
             exit
         }
-    } else {
+    }
+    else {
         $excludeApps = $null
     }
     Update-All -exclude $excludeApps
     exit
 }
+
+function ScoopMain {
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.Object]$params
+    )
+    ScoopCheck
+    if ($params[0] -eq "-h" -or $params[0] -eq "--help" -or $params[0] -eq "help") {
+        ScoopHelp -params $params
+    }
+    if ($params[0] -eq "backup") {
+        ScoopBackup -params $params
+    }
+    if ($params[0] -eq "update") {
+        ScoopUpdate -params $params
+    }
+    Write-Host "scoop-utils: command not found"
+    exit
+}
+
+ScoopMain -params $args
