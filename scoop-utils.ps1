@@ -1,5 +1,5 @@
 # utils for scoop
-# version 0.0.4
+# version 0.0.5
 
 ######################### help info ############################
 $commandHelpInfo = @"
@@ -11,6 +11,7 @@ Type 'scoop-utils.ps1 help <command>' to get help for a specific command.
 
 Available commands:
     backup     backup scoop list
+    install    install all
     update     update all
     help       show this help message
 "@
@@ -19,7 +20,7 @@ $backupHelpInfo = @"
 Usage: scoop-utils.ps1 backup [<options>]
 
 Options:
-    -o, --output <path>    output file path
+    -o, --output <path>    output file path, default is ./scoop-list.xml
 "@
 
 $updateHelpInfo = @"
@@ -29,10 +30,20 @@ Options:
     --exclude <apps>       exclude apps, e.g. --exclude vscode,vncviewer
 "@
 
+$installHelpInfo = @"
+Usage: scoop-utils.ps1 install [<options>]
+
+Options:
+    -i, --input <path>     input file path, default is ./scoop-list.xml
+    -v                     install specified version
+    -y                     accept all
+"@
+
 $helpInfo = @{
-    "main"   = $commandHelpInfo
-    "backup" = $backupHelpInfo
-    "update" = $updateHelpInfo
+    "main"    = $commandHelpInfo
+    "backup"  = $backupHelpInfo
+    "update"  = $updateHelpInfo
+    "install" = $installHelpInfo
 }
 
 # 检查环境变量中是否有scoop
@@ -63,13 +74,110 @@ function ExtractParam {
     }
 }
 
+function HasParam {
+    param (
+        [System.Object[]]$AllParameter,
+        [string]$specifiedParameter
+    )
+    if ($AllParameter -contains $specifiedParameter) {
+        return $true
+    }
+    else {
+        return $false
+    }
+}
+
+######################### help info ############################
+function ScoopHelp {
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.Object[]]$params
+    )
+    if ($params[0] -eq "-h" -or $params[0] -eq "--help") {
+        Write-Host $commandHelpInfo
+    }
+    elseif ($params[0] -eq "help") {
+        if ($params[1]) {
+            Write-Host $helpInfo[$params[1]]
+        }
+        else {
+            Write-Host $commandHelpInfo
+        }
+    }
+    exit
+}
+
+######################### install ############################
+function Install-All {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$filePath,
+        [Parameter(Mandatory = $true)]
+        [bool]$hasVersion,
+        [Parameter(Mandatory = $true)]
+        [bool]$acceptAll
+    )
+    try {
+        $installApps = Import-Clixml -Path $filePath
+        foreach ($installApp in $installApps) {
+            $appName = $installApp.Name
+            $appVersion = $installApp.Version
+            $installCommand = "scoop install $appName"
+            if ($hasVersion) {
+                $installCommand += "@$appVersion"
+            }
+            if ($acceptAll) {
+                Invoke-Expression $installCommand
+            }
+            else {
+                while ($true) {
+                    $userChoice = Read-Host "Install $appName[Y/n]?"
+                    if ($userChoice -eq "" -or $userChoice.ToLower() -eq "y") {
+                        Invoke-Expression $installCommand
+                        break
+                    }
+                    elseif ($userChoice.ToLower() -eq "n") {
+                        Write-Host "Skipping installation of $appName"
+                        break
+                    }
+                    else {
+                        Read-Host "Invalid input. Please enter Y or N."
+                    }
+                }
+            }
+        }
+    }
+    catch {
+        Write-Error "Install-All: $($_.Message)"
+        return
+    }
+}
+
+function ScoopInstall {
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.Object[]]$params
+    )
+    $installFilePath = ExtractParam $params "-i"
+    if (-not $installFilePath) {
+        $installFilePath = ExtractParam $params "--input"
+    }
+    if (-not $installFilePath) {
+        $installFilePath = $PWD.Path + "\scoop-list.xml"
+    }
+    $hasVersion = HasParam $params "-v"
+    $acceptAll = HasParam $params "-y"
+    Install-All -filePath $installFilePath -hasVersion $hasVersion -acceptAll $acceptAll
+}
+
+######################### backup ############################
 function Backup-ScoopList {
     param (
         [Parameter(Mandatory = $true)]
-        [string]$FilePath
+        [string]$filePath
     )
     try {
-        $BackupCommand = "scoop list | Export-Clixml -Path $FilePath"
+        $BackupCommand = "scoop list | Export-Clixml -Path $filePath"
         Invoke-Expression $BackupCommand
     }
     catch {
@@ -78,6 +186,23 @@ function Backup-ScoopList {
     }
 }
 
+function ScoopBackup {
+    param (
+        [Parameter(Mandatory = $true)]
+        [System.Object[]]$params
+    )
+    $backupFilePath = ExtractParam $params "-o"
+    if (-not $backupFilePath) {
+        $backupFilePath = ExtractParam $params "--output"
+    }
+    if (-not $backupFilePath) {
+        $backupFilePath = $PWD.Path + "\scoop-list.xml"
+    }
+    Backup-ScoopList -FilePath $BackupFilePath
+    exit
+}
+
+######################### update ############################
 function Update-All {
     param (
         # $exclude
@@ -105,44 +230,6 @@ function Update-All {
     }
 }
 
-######################### help info ############################
-function ScoopHelp {
-    param (
-        [Parameter(Mandatory = $true)]
-        [System.Object[]]$params
-    )
-    if ($params[0] -eq "-h" -or $params[0] -eq "--help") {
-        Write-Host $commandHelpInfo
-    }
-    elseif ($params[0] -eq "help") {
-        if ($params[1]) {
-            Write-Host $helpInfo[$params[1]]
-        }
-        else {
-            Write-Host $commandHelpInfo
-        }
-    }
-    exit
-}
-
-######################### backup ############################
-function ScoopBackup {
-    param (
-        [Parameter(Mandatory = $true)]
-        [System.Object[]]$params
-    )
-    $backupFilePath = ExtractParam $params "-o"
-    if (-not $backupFilePath) {
-        $backupFilePath = ExtractParam $params "--output"
-    }
-    if (-not $backupFilePath) {
-        $backupFilePath = $PWD.Path + "\scoop-list.xml"
-    }
-    Backup-ScoopList -FilePath $BackupFilePath
-    exit
-}
-
-######################### update ############################
 function ScoopUpdate {
     param (
         [Parameter(Mandatory = $true)]
@@ -162,13 +249,18 @@ function ScoopMain {
     if ($params[0] -eq "-h" -or $params[0] -eq "--help" -or $params[0] -eq "help") {
         ScoopHelp -params $params
     }
-    if ($params[0] -eq "backup") {
+    elseif ($params[0] -eq "backup") {
         ScoopBackup -params $params
     }
-    if ($params[0] -eq "update") {
+    elseif ($params[0] -eq "update") {
         ScoopUpdate -params $params
     }
-    Write-Host "scoop-utils: command not found"
+    elseif ($params[0] -eq "install") {
+        ScoopInstall -params $params
+    }
+    else {
+        Write-Host "scoop-utils: command not found"
+    }
     exit
 }
 
