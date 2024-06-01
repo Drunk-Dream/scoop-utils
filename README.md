@@ -16,7 +16,13 @@ scoop-utils.ps1 <command> [<options>]
     ```
     默认保存在脚本所在目录
 
+- 升级全部应用
+    ```powershell
+    scoop update [--exclude]
+    ```
+    多个应用使用英文`,`分割
+
 ## TODO
 
-- [ ] 安装备份的引用
-- [ ] 全部升级
+- [ ] 安装备份的应用
+- [x] 全部升级

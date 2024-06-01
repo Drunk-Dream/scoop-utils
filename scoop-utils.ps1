@@ -1,7 +1,7 @@
 # utils for scoop
-# version 0.0.2
+# version 0.0.3
 
-# helpinfo
+######################### help info ############################
 $commandHelpInfo = @"
 This is a utils for scoop
 
@@ -11,6 +11,7 @@ Type 'scoop-utils.ps1 help <command>' to get help for a specific command.
 
 Available commands:
     backup     backup scoop list
+    update     update all
     help       show this help message
 "@
 
@@ -20,6 +21,19 @@ Usage: scoop-utils.ps1 backup [<options>]
 Options:
     -o, --output <path>    output file path
 "@
+
+$updateHelpInfo = @"
+Usage: scoop-utils.ps1 update [<options>]
+
+Options:
+    --exclude <apps>       exclude apps, e.g. --exclude vscode,vncviewer
+"@
+
+$helpInfo = @{
+    "main" = $commandHelpInfo
+    "backup" = $backupHelpInfo
+    "update" = $updateHelpInfo
+}
 
 # 检查环境变量中是否有scoop
 if (-not (Get-Command -Name "scoop" -ErrorAction SilentlyContinue)) {
@@ -41,20 +55,46 @@ function Backup-ScoopList {
     }
 }
 
+function Update-All {
+    param (
+        # $exclude
+        [Parameter(Mandatory=$false)]
+        [System.String[]]$exclude
+    )
+    try {
+        $AvailableUpdates = Invoke-Expression "scoop status -l"
+        foreach ($updateApp in $AvailableUpdates) {
+            $name = $updateApp.Name
+            if ($exclude -and $name -in $exclude) {
+                continue
+            }
+            $UpdateCommand = "scoop update $name"
+            Invoke-Expression $UpdateCommand
+            # Write-Host $UpdateCommand
+        }
+    }
+    catch {
+        Write-Error "Update-All: $($_.Message)"
+        return
+    }
+}
+
+######################### help info ############################
 if ($args[0] -eq "-h" -or $args[0] -eq "--help") {
     Write-Host $commandHelpInfo
     exit
 }
 
 if ($args[0] -eq "help") {
-    if ($args[1] -eq "backup") {
-        Write-Host $backupHelpInfo
+    if ($args[1]) {
+        Write-Host $helpInfo[$args[1]]
     } else {
         Write-Host $commandHelpInfo
     }
     exit
 }
 
+######################### backup ############################
 if ($args[0] -eq "backup") {
     if ($args[1] -eq "-o" -or $args[1] -eq "--output") {
         if ($args[2]) {
@@ -69,5 +109,20 @@ if ($args[0] -eq "backup") {
         $BackupFilePath = "scoop-list.xml"
     }
     Backup-ScoopList -FilePath $BackupFilePath
+    exit
+}
+
+######################### update ############################
+if ($args[0] -eq "update") {
+    if ($args -contains "--exclude") {
+        $index = $args.IndexOf("--exclude") + 1
+        if ($index -lt $args.Length -and $args[$index] -notmatch "^-") {
+            Update-All -exclude $args[$index]
+        } else {
+            Write-Error "Update-All: exclude apps not specified"
+        }
+    } else {
+        Update-All
+    }
     exit
 }
