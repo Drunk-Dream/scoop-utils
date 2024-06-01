@@ -4,23 +4,26 @@
 
 ## Usage
 
-详细使用
-
 ```powershell
 scoop-utils.ps1 <command> [<options>]
 ```
 
+- 获取命令帮助
+    ```powershell
+    scoop-utils help <command>
+    ```
+
 - 备份已安装的应用
     ```powershell
-    scoop backup [-o]
+    scoop-utils backup [-o]
     ```
     默认保存在脚本所在目录
 
 - 升级全部应用
     ```powershell
-    scoop update [--exclude]
+    scoop-utils update [--exclude]
     ```
-    多个应用使用英文`,`分割
+    排除多个应用使用英文`,`分割
 
 ## TODO
 
