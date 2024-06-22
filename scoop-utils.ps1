@@ -1,5 +1,5 @@
 # utils for scoop
-# version 0.0.5
+# version 0.0.6
 
 ######################### help info ############################
 $commandHelpInfo = @"
@@ -206,7 +206,7 @@ function ScoopBackup {
 function Update-All {
     param (
         # $exclude
-        [Parameter(Mandatory = $true)]
+        # [Parameter(Mandatory = $true)]
         [System.String[]]$exclude
     )
     try {
