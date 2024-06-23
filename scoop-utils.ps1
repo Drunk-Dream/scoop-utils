@@ -1,5 +1,5 @@
 # utils for scoop
-# version 0.0.6
+# version 0.0.7
 
 ######################### help info ############################
 $commandHelpInfo = @"
@@ -211,6 +211,13 @@ function Update-All {
     )
     try {
         $AvailableUpdates = Invoke-Expression "scoop status -l"
+        # example
+        # $AvailableUpdates = @(
+        #     [PSCustomObject]@{Name = "test1"; Info = "test1" },
+        #     [PSCustomObject]@{Name = "test2"; Info = "test2" }
+        # )
+        # TODO: 添加-s参数交互选择
+        $UpdateCommand = "scoop update"
         foreach ($updateApp in $AvailableUpdates) {
             $name = $updateApp.Name
             $info = $updateApp.Info
@@ -220,8 +227,13 @@ function Update-All {
             ) {
                 continue
             }
-            $UpdateCommand = "scoop update $name"
+            $UpdateCommand = "$UpdateCommand $name"
+        }
+        if ($AvailableUpdates.Length -gt 0) {
             Invoke-Expression $UpdateCommand
+        }
+        else {
+            Write-Host "No updates available"
         }
     }
     catch {
