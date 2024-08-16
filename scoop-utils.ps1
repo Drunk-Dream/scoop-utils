@@ -119,32 +119,45 @@ function Install-All {
     )
     try {
         $installApps = Import-Clixml -Path $filePath
+        $exitApps = scoop list
+        $installCommand = "scoop install"
         foreach ($installApp in $installApps) {
             $appName = $installApp.Name
             $appVersion = $installApp.Version
-            $installCommand = "scoop install $appName"
+            $exitAppObject = $exitApps | Where-Object { $_.Name -eq $appName }
+            if ($exitAppObject) {
+                continue
+            }
             if ($hasVersion) {
-                $installCommand += "@$appVersion"
+                if ($exitAppObject -and $exitAppObject.Version -ne $appVersion) {
+                    continue
+                }
+                $appName += "@$appVersion"
             }
             if ($acceptAll) {
-                Invoke-Expression $installCommand
+                $installCommand += " $appName"
+                continue
             }
-            else {
-                while ($true) {
-                    $userChoice = Read-Host "Install $appName[Y/n]?"
-                    if ($userChoice -eq "" -or $userChoice.ToLower() -eq "y") {
-                        Invoke-Expression $installCommand
-                        break
-                    }
-                    elseif ($userChoice.ToLower() -eq "n") {
-                        Write-Host "Skipping installation of $appName"
-                        break
-                    }
-                    else {
-                        Read-Host "Invalid input. Please enter Y or N."
-                    }
+            while ($true) {
+                $userChoice = Read-Host "Install $appName[Y/n]?"
+                if ($userChoice -eq "" -or $userChoice.ToLower() -eq "y") {
+                    $installCommand += " $appName"
+                    break
+                }
+                elseif ($userChoice.ToLower() -eq "n") {
+                    Write-Host "Skipping installation of $appName"
+                    break
+                }
+                else {
+                    Read-Host "Invalid input. Please enter Y or N."
                 }
             }
+        }
+        if ($installCommand -eq "scoop install") {
+            Write-Host "No apps to install"
+        }
+        else {
+            Invoke-Expression $installCommand
         }
     }
     catch {
